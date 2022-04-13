@@ -10,9 +10,19 @@ const botonEnviar = document.querySelector('.btn-enviar');
 botonEnviar.insertAdjacentElement('afterend' ,botonLimpiar);
 
 botonLimpiar.className = 'btns btn-enviar btn-limpiar';
+document.querySelector('.btn-limpiar').style.backgroundColor = '#ff0000';
+
+botonLimpiar.addEventListener('click', (event) => {
+    event.preventDefault();
+    alert('Estas seguro de que deseas borrar el forulario?');
+});
+
+botonEnviar.addEventListener('click', (event) => {
+    event.preventDefault();
+})
 
 //formulario.innerHTML += '<button class="btns btn-enviar btn-limpiar">Limpiar formulario</button>';
-document.querySelector('.btn-limpiar').style.backgroundColor = '#ff0000';
+//document.querySelector('.btn-limpiar').style.backgroundColor = '#ff0000';
 //formulario.removeChild(document.querySelector('.btn-limpiar'));
 
 //formulario.parentNode.removeChild(formulario);
