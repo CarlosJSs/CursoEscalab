@@ -478,11 +478,11 @@ textarea {
     -webkit-appearance: none;
 }
 
-input:focus,
-textarea:focus {
-    box-shadow: 0 20px 40px -20px rgba(78, 114, 223, 0.5);
-    border: 1px solid #4E73DF;
-    color: #4E73DF;
+input.error,
+textarea.error {
+    box-shadow: 0 20px 40px -20px rgba(255, 0, 0, 0.5);
+    border: 1px solid #ff0000;
+    color: #ff0000;
 }
 
 input[type=number]::-webkit-inner-spin-button,
