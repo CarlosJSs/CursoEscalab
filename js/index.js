@@ -1,41 +1,29 @@
-//----------------------Seleccionar y manipular elementos en el DOM----------------------
+/* Carlos Eduardo López Gutiérrez
+    Instagram: carlos.json
+    GitHub: CarlosJSs 
+    Curso Fundamentals JavaScript | Escalab */
+
+/*Obtenemos los elementos que usaremos a lo largo del codigo por medio de JavaScript*/
 const formulario = document.querySelector('#formulario-contacto');
-
-//const botonLimpiar = document.createElement('button');
-//const textoBotonLimpiar = document.createTextNode('Limpiar formulario');
-//botonLimpiar.appendChild(textoBotonLimpiar);
-
 const botonEnviar = document.querySelector('.btn-enviar');
 
-//-----------Obtenemos todos los elementos que necesitaremos del HTML, usando JS------------
 const nameContact = document.getElementsByName('name_contact')[0];
 const email = document.getElementsByName('email_contact')[0];
 const phone = document.getElementsByName('tel_contact')[0];
 const topic = document.getElementById('topic_contact');
 const commit = document.getElementsByName('commit_contact')[0];
+
 const errorsList = document.getElementById('errors');
 
-//------------Funcion mostrar error, agregamos la clase error a el elemento, mostramos una alerta,
-//            y agregamos el li con el error en la lista inyectando codigo HTML
+/*              Funciones               */
 function showError(element, message){
     element.classList.toggle('error');
     alert(message);
     errorsList.innerHTML += `<li>${message}</li>`;
 }
-
-//------------Limpiamos nuestra lu de errores------------
 function cleanErrors(){
     errorsList.innerHTML = '';
 }
-
-//---------Funcion para enviar el email si las validacion son correctas-------------------
-//---------Definimos una funcion asincrona con parametros que pasaremos al formato del JSON
-//---------Usamos fecth con await pasandole el link de la API y su configuracion (metodo, headers)
-//---------Como estamos usando el metodo post, definimos tambien el cuerpo de lo que enviaremos a la API
-//---------indicamos que es JSON y con stringify pasamos los parametros del cuerpo
-//---------Despues guardamos la respuesta de la API en content pero antes lo parseamos como json
-//---------recordemos que es otro proceso asincrono (usaremos await)
-//---------Al final obtenemos el arreglo errors del objeto content por medio de Object.keys()
 async function sendMail(name, email, phone, select, comment) {
     const rawResponse = await fetch('https://30kd6edtfc.execute-api.us-east-1.amazonaws.com/prod/send-email', {
         method: 'POST',
@@ -45,7 +33,9 @@ async function sendMail(name, email, phone, select, comment) {
         },
         body: JSON.stringify({ name, email, phone, select, comment })
     });
+
     const content = await rawResponse.json();
+
     if(Object.keys(content.errors).length > 0){
         alert('Error al enviar el correo');
     }else{
@@ -53,23 +43,13 @@ async function sendMail(name, email, phone, select, comment) {
     }
 }
 
-//botonEnviar.insertAdjacentElement('afterend' ,botonLimpiar);
-
-//botonLimpiar.className = 'btns btn-enviar btn-limpiar';
-//document.querySelector('.btn-limpiar').style.backgroundColor = '#ff0000';
-
-//botonLimpiar.addEventListener('click', (event) => {
-    //event.preventDefault();
-    //alert('Estas seguro de que deseas borrar el forulario?');
-//});
-
-//-------------Agregamos el evento al boton enviar
+/*                  Eventos                   */
 botonEnviar.addEventListener('click', (event) => {
     event.preventDefault();
     cleanErrors();
     let hasErrors = false;
 
-    //-----------Validaciones del formulario con funciones string y expresiones regulares----------
+    /*                Validaciones de los campos              */
     const sanitizedName = nameContact.value.trim();
     if(sanitizedName.length === 0 || sanitizedName.indexOf(' ') < 0){
         showError(nameContact, "El nombre y apellido no debe estar vacio y debe contener al menos un espacio.");
@@ -92,35 +72,23 @@ botonEnviar.addEventListener('click', (event) => {
         hasErrors = true;
     }
 
-    //--------------------Si todo sale bien enviamos el email-------------------
+    /*              Enviar el Email si todo esta correcto               */
     if(!hasErrors){
         sendMail(sanitizedName, email.value, sanitizedPhone, topic.value, sanitizedCommit);
     }
     
 });
 
-//formulario.innerHTML += '<button class="btns btn-enviar btn-limpiar">Limpiar formulario</button>';
-//document.querySelector('.btn-limpiar').style.backgroundColor = '#ff0000';
-//formulario.removeChild(document.querySelector('.btn-limpiar'));
+/* Desafío opcional: qué elemento y evento podríamos usar para detectar si el usuario 
+     apreta Enter en vez de hacer click?
+     Como elemento usaremos el form del HTML y el evento sera keypress
+formulario.addEventListener('keypress', (event) => {
+    if(event.keyCode===13){//si la tecla presioanda es ENTER mandaremos una alerta
+        alert('Usted está enviando el formulario por medio de la tecla ENTER.')
+    }
+});
 
-//formulario.parentNode.removeChild(formulario);
-
-//conts enlaces = document.getElementsByTagName('a');
-
-//Array.from(enlaces).forEach(element => {
-    //element.parentNode.removeChild(element);
-    //element.style.backgroundColor = '#000000';    
-//});
-
-//console.log(enlaces);
-
-//const formulario = document.getElementById('formulario-contacto');
-//formulario.style.fontFamily = 'serif';
-//formulario.style.width = '50px';
-
-//const botonVerServicios = document.querySelector('.btn-hero');
-//botonVerServicios.className += ' btn-enviar';
-//console.log(botonVerServicios.className);
-
-//botonVerServicios.style.backgroundColor = '#000000';
-//botonVerServicios.innerHTML = 'Cambió';
+Mi desafio quedo a medias ya que funciona parcialmente, si el usuario da enter en el 
+    textarea del comentario sale la alerta pero despues no envia el formulario, solo 
+    da un salto en el texto
+*/
